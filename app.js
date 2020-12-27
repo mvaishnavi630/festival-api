@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("combined"));
 }
 
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
 app.get("/api/v1/:festival", (req, res) => {
   try {
@@ -61,9 +61,15 @@ app.get("/api/v1/:festival", (req, res) => {
   }
 });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-});
+if (process.env.NODE_ENV === "production") {
+  //set static folder
+  console.log("i'm running");
+  app.use(express.static("demo/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 app.listen(port, () => {
   console.log(`Server is listening on Port ${port}`);
