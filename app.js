@@ -3,6 +3,7 @@ const festival = require("./greetings/greetings");
 const app = express();
 const morgan = require("morgan");
 const port = process.env.PORT || 5000;
+const path = require("path");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -58,6 +59,10 @@ app.get("/api/v1/:festival", (req, res) => {
       status: "Failed",
     });
   }
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 });
 
 app.listen(port, () => {
